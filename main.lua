@@ -1,12 +1,11 @@
 Object = require 'libraries/classic/classic'
-require 'objects/Test'
 
 
 function love.load()
     if arg[#arg] == "-debug" then require("mobdebug").start() end
 
-    image = love.graphics.newImage( "image.png" )
-    testInstance = Test()
+    --image = love.graphics.newImage( "image.png" )
+    
     
     local objectFiles = {}
     recursiveEnumerate( 'objects', objectFiles )
@@ -14,14 +13,21 @@ function love.load()
         print( object )
     end
     requireFiles( objectFiles )
+    
+    testInstance = Test()
+    --circle = Circle( 400, 300, 50 )
+    hyperCircle = HyperCircle( 400, 300, 50, 10, 120 )
 end
 
 function love.update( dt )
-    
+    --circle.update( dt )
+    hyperCircle.update( dt )
 end
 
 function love.draw()
-    love.graphics.draw( image, love.math.random( 800 ), love.math.random( 600 ) )
+    --love.graphics.draw( image, love.math.random( 800 ), love.math.random( 600 ) )
+    --circle.draw()
+    hyperCircle.draw()
 end
 
 function recursiveEnumerate( folder, fileList )
