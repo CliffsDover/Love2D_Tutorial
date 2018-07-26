@@ -1,5 +1,5 @@
 Object = require 'libraries/classic/classic'
-
+Input = require 'libraries/Input'
 
 function love.load()
     if arg[#arg] == "-debug" then require("mobdebug").start() end
@@ -17,11 +17,16 @@ function love.load()
     testInstance = Test()
     --circle = Circle( 400, 300, 50 )
     hyperCircle = HyperCircle( 400, 300, 50, 10, 120 )
+    
+    input = Input()
+    input:bind( "mouse1", "test" )
 end
 
 function love.update( dt )
     --circle.update( dt )
     hyperCircle.update( dt )
+    
+    if input:pressed( "test" ) then print( "pressed" ) end
 end
 
 function love.draw()
@@ -55,8 +60,22 @@ function requireFiles( files )
         print( file )
         require( file )
     end
-    
-    
+end
+
+function love.keypressed( key, scancode, isrepeat )
+    print( "[love.keypressed] " .. key )
+end
+
+function love.keyreleased( key )
+    print( "[love.keyreleased] " .. key )
+end
+
+function love.mousepressed( x, y, button, isTouch )
+    print( "[love.mousepressed] " .. x .. " " .. y .. " " .. button )
+end
+
+function love.mousereleased( x, y, button, isTouch )
+    print( "[love.mousereleased] " .. x .. " " .. y .. " " .. button )
 end
 
 
