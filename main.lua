@@ -1,11 +1,12 @@
 Object = require 'libraries/classic/classic'
 Input = require 'libraries/Input'
+Timer = require 'libraries/hump/timer'
 
 function love.load()
     if arg[#arg] == "-debug" then require("mobdebug").start() end
 
     --image = love.graphics.newImage( "image.png" )
-    
+    timer = Timer()
     
     local objectFiles = {}
     recursiveEnumerate( 'objects', objectFiles )
@@ -15,24 +16,35 @@ function love.load()
     requireFiles( objectFiles )
     
     testInstance = Test()
-    --circle = Circle( 400, 300, 50 )
+    circle = Circle( 400, 300, 50 )
+    --circle = {rad = 10, pos = {x = 400, y = 300}}
     hyperCircle = HyperCircle( 400, 300, 50, 10, 120 )
+    
+    timer:after( 5, function()  print("fire 1")  end )
+    timer:every( 1, function()  print("fire 2")  end )
+    timer:tween( 6, hyperCircle, { radius = 96 }, 'in-out-cubic' )
+    timer:tween( 3, hyperCircle, { outerRadius = 256 }, 'in-out-cubic' )
+    
     
     input = Input()
     input:bind( "mouse1", "test" )
 end
 
 function love.update( dt )
+    timer:update( dt )
+    
     --circle.update( dt )
     hyperCircle.update( dt )
     
     if input:pressed( "test" ) then print( "pressed" ) end
+    
+    
 end
 
 function love.draw()
     --love.graphics.draw( image, love.math.random( 800 ), love.math.random( 600 ) )
-    --circle.draw()
-    hyperCircle.draw()
+    --circle:draw()
+    hyperCircle:draw()
 end
 
 function recursiveEnumerate( folder, fileList )
