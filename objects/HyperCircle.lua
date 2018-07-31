@@ -19,6 +19,6 @@ function HyperCircle:draw()
     local prevLineWidth = love.graphics.getLineWidth()
     love.graphics.circle( 'fill', self.x, self.y, self.radius )
     love.graphics.setLineWidth( self.lineWidth )
-    love.graphics.circle( 'line', self.x, self.y, self.  )
+    love.graphics.circle( 'line', self.x, self.y, self.outerRadius )
     love.graphics.setLineWidth( prevLineWidth )
 end

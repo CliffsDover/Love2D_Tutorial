@@ -1,6 +1,7 @@
 Object = require 'libraries/classic/classic'
 Input = require 'libraries/Input'
 Timer = require 'libraries/hump/timer'
+Moses = require 'libraries/Moses/moses'
 
 function love.load()
     if arg[#arg] == "-debug" then require("mobdebug").start() end
@@ -28,6 +29,8 @@ function love.load()
     
     input = Input()
     input:bind( "mouse1", "test" )
+    
+    TableExercises()
 end
 
 function love.update( dt )
@@ -88,6 +91,20 @@ end
 
 function love.mousereleased( x, y, button, isTouch )
     print( "[love.mousereleased] " .. x .. " " .. y .. " " .. button )
+end
+
+function TableExercises()    
+    a = {1, 2, '3', 4, '5', 6, 7, true, 9, 10, 11, a = 1, b = 2, c = 3, {1, 2, 3}}
+    b = {1, 1, 3, 4, 5, 6, 7, false}
+    c = {'1', '2', '3', 4, 5, 6}
+    d = {1, 4, 3, 4, 5, 6}
+
+    Moses.each( a, print )
+    
+    print( Moses.count( b, 1 ) )
+    
+    Moses.each( Moses.map( d, function (k,v) return v + 1 end ), print )
+    
 end
 
 
