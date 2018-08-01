@@ -2,6 +2,8 @@ Object = require 'libraries/classic/classic'
 Input = require 'libraries/Input'
 Timer = require 'libraries/hump/timer'
 Moses = require 'libraries/Moses/moses'
+--Stage = require 'rooms/Stage'
+--CircleRoom = require 'rooms/CircleRoom'
 
 function love.load()
     if arg[#arg] == "-debug" then require("mobdebug").start() end
@@ -29,8 +31,16 @@ function love.load()
     
     input = Input()
     input:bind( "mouse1", "test" )
+    input:bind( "a", "a" )
+    input:bind( "b", "b" )
     
     TableExercises()
+    
+    
+    rooms = {}
+    currentRoom = nil
+    
+    --circleRoom = CircleRoom()
 end
 
 function love.update( dt )
@@ -39,8 +49,19 @@ function love.update( dt )
     --circle.update( dt )
     hyperCircle.update( dt )
     
-    if input:pressed( "test" ) then print( "pressed" ) end
+    if input:pressed( "test" ) then 
+        print( "pressed" ) 
+        --GotoRoom( 'CircleRoom', 'circleRoom' )    
+        GotoRoom( 'RectangleRoom', 'rectangleRoom' )  
+    elseif input:pressed( 'a' ) then
+        print( 'a' )
+        GotoRoom( 'CircleRoom', 'circleRoom' )
+    elseif input:pressed( 'b' ) then
+        GotoRoom( 'RectangleRoom', 'rectangleRoom' ) 
+        print( 'b' )
+    end
     
+    if currentRoom then currentRoom:update( dt ) end
     
 end
 
@@ -48,6 +69,8 @@ function love.draw()
     --love.graphics.draw( image, love.math.random( 800 ), love.math.random( 600 ) )
     --circle:draw()
     hyperCircle:draw()
+    
+    if currentRoom then currentRoom:draw() end
 end
 
 function recursiveEnumerate( folder, fileList )
@@ -106,6 +129,26 @@ function TableExercises()
     Moses.each( Moses.map( d, function (k,v) return v + 1 end ), print )
     
 end
+
+function AddRoom( roomType, roomName, ... )
+    local room = _G[ roomType ]( roomName, ... )
+    rooms[ roomName ] = room
+    return room
+end
+
+
+
+function GotoRoom( roomType, roomName, ... )
+    if currentRoom and rooms[ roomName ] then
+        if currentRoom.deactivate then currentRoom:deactivate() end
+        currentRoom = rooms[ roomName ]
+        if currentRoom.activate then currentRoom:activate() end
+    else 
+        currentRoom = AddRoom( roomType, roomName, ... )
+    end
+
+end
+
 
 
 
